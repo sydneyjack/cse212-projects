@@ -8,10 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 public class TakingTurnsQueueTests
 {
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
-    // run until the queue is empty
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+     // Defect(s) Found:
+    // The queue behaved like a stack because people were added to the front instead of the back.
+    // People were not removed in FIFO order.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -40,10 +39,9 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
-    // After running 5 times, add George with 3 turns.  Run until the queue is empty.
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found:
+    // A new person added while the queue was running did not enter the queue in the correct position
+    // because the underlying queue behaved like a stack instead of a queue.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -82,10 +80,8 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
-    // Run 10 times.
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+   // Defect(s) Found:
+   // A person with 0 turns (infinite turns) was not added back into the queue after taking a turn.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -113,10 +109,9 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
-    // Run 10 times.
-    // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found:
+    // A person with a negative number of turns (infinite turns) was incorrectly removed from the queue
+    // instead of remaining in the queue forever.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -141,9 +136,8 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Try to get the next person from an empty queue
-    // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Defect(s) Found:
+    // No defects found. The correct InvalidOperationException with the expected message was thrown.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
